@@ -1,0 +1,126 @@
+body {
+    margin:0px;
+    background-color: #f5e2ed;
+}
+
+.stage {
+    position: relative;
+    background-color: #F5FBEF;
+    color: #4b4f52;
+    width: 500px;
+    height: 600px;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 5px;
+    display: none;
+}
+
+.file{
+    background-color: #F5FBEF;
+    color: #585e63;
+    width: 400px;
+    height: 450px;
+    margin: auto;
+    margin-top: 100px;
+    border-radius: 5px;
+    padding: 80px 30px;
+}
+
+input{
+    margin-top: 70px;
+}
+
+.inputFile{
+    width: 300px;
+    margin:auto;
+}
+
+.turn {
+    position: absolute;
+    top: 250px; 
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+
+.previous {
+    left: -120px;
+    background-image: url('./prev.png');
+}
+.previous:hover{
+    background-image: url('./prev_hover.png');
+}
+
+.next {
+    left: 518px;
+    background-image: url('./next.png')
+}   
+.next:hover{
+    background-image: url('./next_hover.png');
+}
+
+.heading{
+    text-align: center;
+    font-size:4em;
+    font-family: 'Comic Sans MS';
+    font-weight: bold;
+}
+
+input::file-selector-button{
+    height: 70px;
+    width: 150px;
+    border:none;
+    background-color: #515967;
+    color:#F5FBEF;
+    border-radius: 10px;
+    font-size: 1.5em;
+    cursor:pointer
+}
+
+.start{
+    height: 100px;
+    width: 300px;
+    margin:auto;
+    margin-top:60px;
+    background-color: #515967;
+    color:#F5FBEF;
+    border-radius: 10px;
+    font-size: 2.5em;
+    cursor:pointer;
+    line-height: 100px;
+    font-family: 'Comic Sans MS';
+    text-align: center;
+}
+
+.pagination{
+    display: flex;
+    justify-content:space-around;
+    width: 500px;
+    margin: auto;
+    margin-top: 25px;
+    display: none;
+}
+
+.page{
+    height: 50px;
+    width: 50px;
+    background-color: #515967;
+    color:#F5FBEF;
+    display: inline-block;
+    text-align: center;
+    font-size: 2em;
+    font-family: 'Comic Sans MS';
+    line-height: 50px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.page:hover{
+    background-color: #F5FBEF;
+    color:#503D42;
+   
+   
+        
+       
+ 
+}
