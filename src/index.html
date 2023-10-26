@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="jquery.js"></script>
+    <script src="main.js" defer></script>
+</head>
+
+<body>
+    <div class="file">
+        <div class='heading'>Bookletor</div>
+        <div class="inputFile">
+            <input type="file">
+        </div>
+        <div class="start">Generate</div>
+    </div>
+    <div class="stage">
+        <div class="content"></div>
+        <div class="turn next"></div>
+        <div class="turn previous"></div>
+        <button id="increaseFont">增大字体</button>
+        <button id="decreaseFont">减小字体</button>
+    </div>
+    <div class="pagination">
+        <div class="page">1</div>
+        <div class="page">2</div>
+        <div class="page">3</div>
+        <div class="page">4</div>
+        <div class="page">5</div>
+        <div class="page">6</div>
+    </div>
+    <html>
+    <head>
+        <title>bookletor</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            
+            #reader {
+                width: 80%;
+                margin: 0 auto;
+            }
+
+            #fileInput {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        
+    <script>
+    let selectedFile = null;
+    let contentText = "";  // Store the entire content
+
+function updatePagination() {
+    console.log("Updating pagination");
+    let paginationDiv = document.querySelector(".pagination");
+    paginationDiv.innerHTML = "";
+    
+    for (let i = 0; i < pages.length; i++) {
+        let pageButton = document.createElement("div");
+        pageButton.classList.add("page");
+        pageButton.innerText = i + 1;
+        pageButton.addEventListener("click", function() {
+            currentPage = i;
+            displayCurrentPage();
+        });
+        paginationDiv.appendChild(pageButton);
+    }
+}
+
+
+console.log("Script started");
+
+function handleFileUpload(event) {
+    console.log("Handling file upload");
+    let file = event.target.files[0];
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            console.log("File read successfully");
+            contentText = e.target.result;
+            splitIntoPages();
+            displayCurrentPage();
+        }
+        reader.onerror = function(e) {
+            console.error("Error reading file:", e);
+        };
+        reader.readAsText(file);
+    } else {
+        console.error("No file selected");
+    }
+}
+
+function splitIntoPages() {
+    console.log("Splitting content into pages");
+    let stageDiv = document.querySelector(".stage");
+    let contentDiv = document.querySelector(".content");
+    contentDiv.innerText = contentText;
+    pages = [];
+    
+    while (contentDiv.innerText.length > 0) {
+        while (contentDiv.scrollHeight > stageDiv.clientHeight && contentDiv.innerText.length > 0) {
+            // Reduce the content by one character at a time from the end
+            contentDiv.innerText = contentDiv.innerText.slice(0, -1);
+        }
+        
+        // Store the fitting content in the pages array
+        pages.push(contentDiv.innerText);
+        contentText = contentText.slice(contentDiv.innerText.length);
+        contentDiv.innerText = contentText;
+    }
+}
+
+
+function displayCurrentPage() {
+    // Show the .stage and .pagination divs
+    document.querySelector(".stage").style.display = "block";
+    document.querySelector(".pagination").style.display = "flex";
+    
+    document.querySelector(".content").innerText = pages[currentPage];
+    updatePagination();
+
+
+    console.log("Displaying current page:", currentPage);
+    document.querySelector(".content").innerText = pages[currentPage];
+    updatePagination();
+}
+
+document.querySelector(".start").addEventListener("click", function() {
+    console.log("Generate button clicked");
+    displayCurrentPage();
+});
+
+document.querySelector(".turn.next").addEventListener("click", function() {
+    console.log("Next button clicked");
+    if (currentPage < pages.length - 1) {
+        currentPage++;
+        displayCurrentPage();
+    }
+});
+
+document.querySelector(".turn.previous").addEventListener("click", function() {
+    console.log("Previous button clicked");
+    if (currentPage > 0) {
+        currentPage--;
+        displayCurrentPage();
+    }
+});
+
+    let pages = [];  // Store content split into pages
+    let currentPage = 0;  // Index of the currently displayed page
+
+    // Function to update the display based on the current page
+    function updateDisplay() {
+        if (pages[currentPage]) {
+            document.querySelector(".content").innerText = pages[currentPage];
+        }
+    }
+
+    function splitContentIntoPages() {
+        let contentDiv = document.querySelector(".content");
+        let portionSize = 100;  // Initial portion size to check
+        let startIdx = 0;
+        while (startIdx < contentText.length) {
+            contentDiv.innerText = contentText.substr(startIdx, portionSize);
+            while (!isOverflowing(contentDiv) && startIdx + portionSize < contentText.length) {
+                portionSize += 10;  // Incrementally increase portion size
+                contentDiv.innerText = contentText.substr(startIdx, portionSize);
+            }
+            pages.push(contentText.substr(startIdx, portionSize - 10));  // The last increment that caused overflow is removed
+            startIdx += portionSize - 10;
+            portionSize = 100;  // Reset portion size for next iteration
+        }
+    }
+
+    function isOverflowing(element) {
+        return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+    }
+
+    $(document).ready(function(){
+        // Handle click event for 'increaseFont' button
+        $("#increaseFont").click(function(){
+            let currentSize = parseInt($(".content").css("font-size"));
+            $(".content").css("font-size", currentSize + 1 + "px");
+        });
+
+        // Handle click event for 'decreaseFont' button
+        $("#decreaseFont").click(function(){
+            let currentSize = parseInt($(".content").css("font-size"));
+            if(currentSize > 1) {  // Ensure font size doesn't go to zero or negative
+                $(".content").css("font-size", currentSize - 1 + "px");
+            }
+        });
+        
+        // Event listener for file input
+        document.querySelector(".inputFile input[type='file']").addEventListener('change', function(event){
+            selectedFile = event.target.files[0];
+            if (selectedFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Storing the entire file content
+                    contentText = e.target.result;
+                    // Split content into pages based on .content div's height
+                    splitContentIntoPages();
+                    // Initially display the first page
+                    currentPage = 0;
+                    updateDisplay();
+                };
+                reader.readAsText(selectedFile);
+            }
+        });
+
+        // Event listener for the "next" page-turning button
+        document.querySelector(".turn.next").addEventListener('click', function(){
+            if (currentPage < pages.length - 1) {
+                currentPage++;
+                updateDisplay();
+            }
+        });
+
+        // Event listener for the "previous" page-turning button
+        document.querySelector(".turn.previous").addEventListener('click', function(){
+            if (currentPage > 0) {
+                currentPage--;
+                updateDisplay();
+            }
+        });
+
+        // Generate page number buttons based on the number of pages
+        let paginationDiv = document.querySelector(".pagination");
+        paginationDiv.innerHTML = "";  // Clear existing page number buttons
+        for (let i = 0; i < pages.length; i++) {
+            let pageButton = document.createElement("div");
+            pageButton.className = "page";
+            pageButton.innerText = i + 1;
+            pageButton.addEventListener('click', function(){
+                currentPage = i;
+                updateDisplay();
+            });
+            paginationDiv.appendChild(pageButton);
+        }
+    });
+
+    </script>
+        
+    </body>
+</html>
