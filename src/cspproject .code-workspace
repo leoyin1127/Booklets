@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"name": "cspproject ",
+			"path": ".."
+		},
+		{
+			"name": "src",
+			"path": "../../cspproject/csp2023-s1-a1/src"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "cspproject ",
+		"liveServer.settings.port": 5501
+	}
+}
